@@ -61,6 +61,7 @@ extern void yyerror(char *s);
 %right ASSIGN
 %nonassoc NOT AMPERSAND
 
+%start translation_unit
 %%
 
 CONSTANT: INTEGER_CONSTANT
