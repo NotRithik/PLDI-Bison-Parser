@@ -39,7 +39,7 @@ INVALID-TOKEN .
 
 %%
 
-{KEYWORD} {printf("<KEYWORD,%s>", yytext); return ARROW;}
+{KEYWORD} {printf("<KEYWORD,%s>", yytext);}
 {IDENTIFIER} {printf("<IDENTIFIER,%s>", yytext);}
 {INTEGER-CONSTANT} {printf("<INTEGER-CONSTANT,%s>", yytext);}
 {CHARACTER-CONSTANT} {printf("<CHARACTER-CONSTANT,%s>", yytext);}
