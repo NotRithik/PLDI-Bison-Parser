@@ -5,15 +5,19 @@ extern int yylex();
 extern void yyerror(char *s);
 %}
 
-%token NUMBER
-%token IDENTIFIER
-%token CONSTANT
-%token STRING_LITERAL
-%token INTEGER_CONSTANT
-%token CHAR_CONSTANT
+%union {
+    int int_val;
+    char char_val;
+    char* str_val;
+}
+
+%token <str_val> IDENTIFIER
+%token <str_val> STRING_LITERAL
+%token <int_val> INTEGER_CONSTANT
+%token <char_val> CHARACTER_CONSTANT
 %token OP_PARENTHESIS "("
 %token CL_PARENTHESIS ")"
-%token OP_BRACKET " ["
+%token OP_BRACKET "["
 %token CL_BRACKET "]"
 %token OP_BRACE "{"
 %token CL_BRACE "}"
@@ -27,7 +31,6 @@ extern void yyerror(char *s);
 %token DIVIDE "/"
 %token AMPERSAND "&"
 %token MODULO "%"
-%token EXCLAMATION "!"
 %token INT "int"
 %token CHAR "char"
 %token VOID "void"
@@ -35,8 +38,6 @@ extern void yyerror(char *s);
 %token ELSE "else"
 %token FOR "for"
 %token RETURN "return"
-
-%left '+' '-' '*' '/' 
 
 %token ARROW "->"
 %token AND "&&"
@@ -50,10 +51,23 @@ extern void yyerror(char *s);
 %token NOT "!"
 %token TERNARY_CONDITIONAL "?"
 
+%left PLUS MINUS
+%left ASTERISK DIVIDE MODULO
+%left LESS_THAN GREATER_THAN LEQ GEQ
+%left EQ NEQ
+%left AND
+%left OR
+%right TERNARY_CONDITIONAL
+%right ASSIGN
+%nonassoc NOT AMPERSAND
+
 %%
 
-// Optionals
+CONSTANT: INTEGER_CONSTANT
+    | CHARACTER_CONSTANT
+    ;
 
+// Optionals
 IDENTIFIER_opt: IDENTIFIER
     | /* empty */
     ;
@@ -103,7 +117,7 @@ unary_operator: AMPERSAND
     | ASTERISK
     | PLUS
     | MINUS
-    | EXCLAMATION
+    | NOT
     ;
 
 multiplicative_expression: unary_expression
