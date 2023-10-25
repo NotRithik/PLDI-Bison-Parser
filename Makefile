@@ -16,7 +16,6 @@ lex.yy.c: 10_A3.l
 parser: lex.yy.c 10_A3.tab.c 10_A3.tab.h
 	$(CC) $(CFLAGS) -c 10_A3.c -o 10_A3.o
 	$(CC) $(CFLAGS) -c lex.yy.c -o lex.yy.o
-	# $(CC) $(CFLAGS) -c 10_A3.tab.c 10_A3.tab.h -o 10_A3.tab.o
 	$(CC) $(CFLAGS) -o parser 10_A3.c lex.yy.c 10_A3.tab.c
 
 build: parser
