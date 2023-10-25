@@ -23,10 +23,11 @@ extern void yyerror(char *s);
 %token ASSIGN "="
 %token PLUS "+"
 %token MINUS "-"
-%token TIMES "*"
+%token ASTERISK "*"
 %token DIVIDE "/"
 %token AMPERSAND "&"
 %token MODULO "%"
+%token EXCLAMATION "!"
 %token INT "int"
 %token CHAR "char"
 %token VOID "void"
@@ -49,18 +50,44 @@ extern void yyerror(char *s);
 %token NOT "!"
 %token TERNARY_CONDITIONAL "?"
 
-
 %%
 
+// Optionals
+
+IDENTIFIER_opt: IDENTIFIER
+    | /* empty */
+    ;
+
+argument_expression_list_opt: argument_expression_list
+    | /* empty */
+    ;
+
+pointer_opt: pointer
+    | /* empty */
+    ;
+
+parameter_list_opt: parameter_list
+    | /* empty */
+    ;
+
+block_item_list_opt: block_item_list
+    | /* empty */
+    ;
+
+expression_opt: expression
+    | /* empty */
+    ;
+
+// Expressions
 primary_expression: IDENTIFIER
     | CONSTANT
     | STRING_LITERAL
     | OP_PARENTHESIS expression CL_PARENTHESIS
     ;
+
 postfix_expression: primary_expression
     | postfix_expression OP_BRACKET expression CL_BRACKET
-    | postfix_expression OP_PARENTHESIS CL_PARENTHESIS
-    | postfix_expression OP_PARENTHESIS argument_expression_list CL_PARENTHESIS
+    | postfix_expression OP_PARENTHESIS argument_expression_list_opt CL_PARENTHESIS
     | postfix_expression ARROW IDENTIFIER
     ;
 
@@ -73,34 +100,39 @@ unary_expression: postfix_expression
     ;
 
 unary_operator: AMPERSAND
-    | TIMES
-    | ASSIGN
-    | MINUS 
-    | MODULO
+    | ASTERISK
+    | PLUS
+    | MINUS
+    | EXCLAMATION
     ;
 
 multiplicative_expression: unary_expression
-    | multiplicative_expression TIMES unary_expression
+    | multiplicative_expression ASTERISK unary_expression
     | multiplicative_expression DIVIDE unary_expression
     | multiplicative_expression MODULO unary_expression
     ;
+
 additive_expression: multiplicative_expression
     | additive_expression PLUS multiplicative_expression
     | additive_expression MINUS multiplicative_expression
     ;
-relation_expression: additive_expression
-    | relation_expression LESS_THAN additive_expression
-    | relation_expression GREATER_THAN additive_expression
-    | relation_expression LEQ additive_expression
-    | relation_expression GEQ additive_expression
+
+relational_expression: additive_expression
+    | relational_expression LESS_THAN additive_expression
+    | relational_expression GREATER_THAN additive_expression
+    | relational_expression LEQ additive_expression
+    | relational_expression GEQ additive_expression
     ;
-equality_expression: relation_expression
-    | equality_expression EQ relation_expression
-    | equality_expression NEQ relation_expression
+
+equality_expression: relational_expression
+    | equality_expression EQ relational_expression
+    | equality_expression NEQ relational_expression
     ;
+
 logical_AND_expression: equality_expression
     | logical_AND_expression AND equality_expression
     ;
+
 logical_OR_expression: logical_AND_expression
     | logical_OR_expression OR logical_AND_expression
     ;
@@ -108,79 +140,89 @@ logical_OR_expression: logical_AND_expression
 conditional_expression: logical_OR_expression
     | logical_OR_expression TERNARY_CONDITIONAL expression COLON conditional_expression
     ;
+
 assignment_expression: conditional_expression
     | unary_expression ASSIGN assignment_expression
     ;
 
 expression: assignment_expression
-    | expression COMMA assignment_expression
     ;
 
+// Declarations
 declaration: type_specifier init_declarator SEMICOLON
     ;
+
 init_declarator: declarator
     | declarator ASSIGN initializer
     ;
-type_specifier: INT
+
+type_specifier: VOID
     | CHAR
-    | VOID
+    | INT
     ;
-declarator: pointer direct_declarator
-    | direct_declarator
+
+declarator: pointer_opt direct_declarator
     ;
-direct_declarator: IDENTIFIER 
-    | IDENTIFIER 
+
+direct_declarator: IDENTIFIER
     | IDENTIFIER OP_BRACKET INTEGER_CONSTANT CL_BRACKET
-    | IDENTIFIER OP_PARENTHESIS parameter_list CL_PARENTHESIS
-    | IDENTIFIER OP_PARENTHESIS CL_PARENTHESIS
+    | IDENTIFIER OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS
     ;
-pointer : TIMES
+
+pointer: ASTERISK
     ;
 
 parameter_list: parameter_declaration
     | parameter_list COMMA parameter_declaration
     ;
-parameter_declaration: type_specifier pointer IDENTIFIER
-    | type_specifier pointer
-    | IDENTIFIER 
-    ;
-initializer : assignment_expression
+
+parameter_declaration: type_specifier pointer_opt IDENTIFIER_opt
     ;
 
+initializer: assignment_expression
+    ;
+
+// Statements
 statement: compound_statement
     | expression_statement
     | selection_statement
     | iteration_statement
     | jump_statement
     ;
-compound_statement: OP_BRACE CL_BRACE
-    | OP_BRACE block_item_list CL_BRACE
+
+compound_statement: OP_BRACE block_item_list_opt CL_BRACE
     ;
+
 block_item_list: block_item
     | block_item_list block_item
     ;
+
 block_item: declaration
     | statement
     ;
-expression_statement: expression SEMICOLON
-    | SEMICOLON
+
+expression_statement: expression_opt SEMICOLON
     ;
+
 selection_statement : IF OP_PARENTHESIS expression CL_PARENTHESIS statement
     | IF OP_PARENTHESIS expression CL_PARENTHESIS statement ELSE statement
     ;
+
 iteration_statement:
-    FOR OP_PARENTHESIS expressionopt SEMICOLON expressionopt SEMICOLON expressionopt CL_PARENTHESIS statement
+    FOR OP_PARENTHESIS expression_opt SEMICOLON expression_opt SEMICOLON expression_opt CL_PARENTHESIS statement
     ;
 
-expressionopt: expression
-    | /* empty */
+jump_statement: RETURN expression_opt SEMICOLON
+
+// Translation unit
+translation_unit: external_declaration
+    | translation_unit external_declaration
     ;
 
-jump_statement: RETURN expressionopt SEMICOLON
-
-translation_unit: functional_definition
-    | declaration
+external_declaration: declaration
+    | function_definition
     ;
-functional_definition: type_specifier declarator compound_statement
+
+function_definition: type_specifier declarator compound_statement
     ;
 %%
