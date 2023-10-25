@@ -13,5 +13,5 @@ int main()
 }
 
 void yyerror(char *s) {
-	printf("Error: %s on '%s' at line %d, char\n",s, yytext, yylineno);
+	printf("Error: %s on '%s' on line %d\n",s, yytext, yylineno);
 }
