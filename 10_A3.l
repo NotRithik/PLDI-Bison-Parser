@@ -49,30 +49,30 @@ INVALID-TOKEN .
     if (strcmp(yytext, "int") == 0)    return INT;
     if (strcmp(yytext, "return") == 0) return RETURN;
     if (strcmp(yytext, "void") == 0)   return VOID;
-    printf("<KEYWORD,%s>", yytext);
+    //printf("<KEYWORD,%s>", yytext);
 }
 
 {IDENTIFIER} {
     yylval.str_val = strdup(yytext);
-    printf("<IDENTIFIER,%s>", yytext);
+    //printf("<IDENTIFIER,%s>", yytext);
     return IDENTIFIER;
 }
 
 {INTEGER-CONSTANT} {
     yylval.int_val = atoi(yytext);
-    printf("<INTEGER-CONSTANT,%s>", yytext);
+    //printf("<INTEGER-CONSTANT,%s>", yytext);
     return INTEGER_CONSTANT;
 }
 
 {CHARACTER-CONSTANT} {
     yylval.char_val = yytext[1]; // TODO: don't assume well formed input
-    printf("<CHARACTER-CONSTANT,%s>", yytext);
+    //printf("<CHARACTER-CONSTANT,%s>", yytext);
     return CHARACTER_CONSTANT;
 }
 
 {STRING-LITERAL} {
     yylval.str_val = strdup(yytext);
-    printf("<STRING-LITERAL,%s>", yytext);
+    //printf("<STRING-LITERAL,%s>", yytext);
     return STRING_LITERAL;
 }
 
@@ -120,13 +120,13 @@ INVALID-TOKEN .
             break;
             //TODO: check if it is possible for yytext[1] to be a bad memory location
     }
-    printf("<PUNCTUATOR,%s>", yytext);
+    //printf("<PUNCTUATOR,%s>", yytext);
 }
 
 {WS} {;}
 
 {INVALID-TOKEN} {
-    printf("<INVALID TOKEN,%s>", yytext);
+    //printf("<INVALID TOKEN,%s>", yytext);
     yyterminate();
 }
 
