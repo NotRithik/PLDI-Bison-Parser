@@ -241,10 +241,4 @@ external_declaration: declaration {printf("external-declaration\n");}
 
 function_definition: type_specifier declarator compound_statement {printf("function-definition\n");}
     ;
-declaration_list: declaration {printf("declaration-list\n");}
-    | declaration_list declaration {printf("declaration-list\n");}
-    ;
 %%
-void yyerror(char *s) {
-  printf("Error: %s on '%s'\n", s, yytext);
-}
