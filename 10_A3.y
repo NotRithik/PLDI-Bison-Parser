@@ -94,150 +94,157 @@ expression_opt: expression
     ;
 
 // Expressions
-primary_expression: IDENTIFIER
-    | CONSTANT
-    | STRING_LITERAL
-    | OP_PARENTHESIS expression CL_PARENTHESIS
+primary_expression: IDENTIFIER {printf("primary-expression\n");}
+    | CONSTANT      {printf("primary-expression\n");}
+    | STRING_LITERAL   {printf("primary-expression\n");}
+    | OP_PARENTHESIS expression CL_PARENTHESIS {printf("primary-expression\n");}
     ;
 
-postfix_expression: primary_expression
-    | postfix_expression OP_BRACKET expression CL_BRACKET
-    | postfix_expression OP_PARENTHESIS argument_expression_list_opt CL_PARENTHESIS
-    | postfix_expression ARROW IDENTIFIER
+postfix_expression: primary_expression {printf("postfix-expression\n");}
+    | postfix_expression OP_BRACKET expression CL_BRACKET {printf("postfix-expression\n");}
+    | postfix_expression OP_PARENTHESIS argument_expression_list_opt CL_PARENTHESIS {printf("postfix-expression\n");}
+    | postfix_expression ARROW IDENTIFIER  {printf("postfix-expression\n");}
     ;
 
-argument_expression_list: assignment_expression
-    | argument_expression_list COMMA assignment_expression
+argument_expression_list: assignment_expression {printf("argument-expression-list\n");}
+    | argument_expression_list COMMA assignment_expression {printf("argument-expression-list\n");}
     ;
 
-unary_expression: postfix_expression
-    | unary_operator unary_expression
+unary_expression: postfix_expression {printf("unary-expression postfix-expression\n");}
+    | unary_operator unary_expression {printf("unary-expression\n");}
     ;
 
-unary_operator: AMPERSAND
-    | ASTERISK
-    | PLUS
-    | MINUS
-    | NOT
+unary_operator: AMPERSAND {printf("unary-operator\n");}
+    | ASTERISK {printf("unary-operator\n");}
+    | PLUS  {printf("unary-operator\n");}
+    | MINUS {printf("unary-operator\n");}
+    | NOT    {printf("unary-operator\n");}
     ;
 
-multiplicative_expression: unary_expression
-    | multiplicative_expression ASTERISK unary_expression
-    | multiplicative_expression DIVIDE unary_expression
-    | multiplicative_expression MODULO unary_expression
+multiplicative_expression: unary_expression {printf("multiplicative-expression\n");}
+    | multiplicative_expression ASTERISK unary_expression {printf("multiplicative-expression\n");}
+    | multiplicative_expression DIVIDE unary_expression {printf("multiplicative-expression\n");}
+    | multiplicative_expression MODULO unary_expression {printf("multiplicative-expression\n");}
     ;
 
-additive_expression: multiplicative_expression
-    | additive_expression PLUS multiplicative_expression
-    | additive_expression MINUS multiplicative_expression
+additive_expression: multiplicative_expression {printf("additive-expression\n");}
+    | additive_expression PLUS multiplicative_expression {printf("additive-expression\n");}
+    | additive_expression MINUS multiplicative_expression {printf("additive-expression\n");}
     ;
 
-relational_expression: additive_expression
-    | relational_expression LESS_THAN additive_expression
-    | relational_expression GREATER_THAN additive_expression
-    | relational_expression LEQ additive_expression
-    | relational_expression GEQ additive_expression
+relational_expression: additive_expression {printf("relational-expression\n");}
+    | relational_expression LESS_THAN additive_expression {printf("relational-expression\n");}
+    | relational_expression GREATER_THAN additive_expression {printf("relational-expression\n");}
+    | relational_expression LEQ additive_expression {printf("relational-expression\n");}
+    | relational_expression GEQ additive_expression {printf("relational-expression\n");}
     ;
 
-equality_expression: relational_expression
-    | equality_expression EQ relational_expression
-    | equality_expression NEQ relational_expression
+equality_expression: relational_expression  {printf("equality-expression\n");}
+    | equality_expression EQ relational_expression {printf("equality-expression\n");}
+    | equality_expression NEQ relational_expression {printf("equality-expression\n");}
     ;
 
-logical_AND_expression: equality_expression
-    | logical_AND_expression AND equality_expression
+logical_AND_expression: equality_expression  {printf("logical-AND-expression\n");}
+    | logical_AND_expression AND equality_expression {printf("logical-AND-expression\n");}
     ;
 
-logical_OR_expression: logical_AND_expression
-    | logical_OR_expression OR logical_AND_expression
+logical_OR_expression: logical_AND_expression {printf("logical-OR-expression\n");}
+    | logical_OR_expression OR logical_AND_expression {printf("logical-OR-expression\n");}
     ;
 
-conditional_expression: logical_OR_expression
-    | logical_OR_expression TERNARY_CONDITIONAL expression COLON conditional_expression
+conditional_expression: logical_OR_expression {printf("conditional-expression\n");}
+    | logical_OR_expression TERNARY_CONDITIONAL expression COLON conditional_expression {printf("conditional-expression\n");}
     ;
 
-assignment_expression: conditional_expression
-    | unary_expression ASSIGN assignment_expression
+assignment_expression: conditional_expression {printf("assignment-expression\n");}
+    | unary_expression ASSIGN assignment_expression {printf("assignment-expression\n");}
     ;
 
-expression: assignment_expression
+expression: assignment_expression  {printf("expression\n");}
     ;
 
 // Declarations
-declaration: type_specifier init_declarator SEMICOLON
+declaration: type_specifier init_declarator SEMICOLON {printf("declaration\n");}
     ;
 
-init_declarator: declarator
-    | declarator ASSIGN initializer
+init_declarator: declarator {printf("init-declarator\n");}
+    | declarator ASSIGN initializer {printf("init-declarator\n");}
     ;
 
-type_specifier: VOID
-    | CHAR
-    | INT
+type_specifier: VOID {printf("type-specifier\n");}
+    | CHAR {printf("type-specifier\n");}
+    | INT {printf("type-specifier\n");}
     ;
 
-declarator: pointer_opt direct_declarator
+declarator: pointer_opt direct_declarator {printf("declarator\n");}
     ;
 
-direct_declarator: IDENTIFIER
-    | IDENTIFIER OP_BRACKET INTEGER_CONSTANT CL_BRACKET
-    | IDENTIFIER OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS
+direct_declarator: IDENTIFIER {printf("direct-declarator\n");}
+    | IDENTIFIER OP_BRACKET INTEGER_CONSTANT CL_BRACKET {printf("direct-declarator\n");}
+    | IDENTIFIER OP_PARENTHESIS parameter_list_opt CL_PARENTHESIS {printf("direct-declarator\n");}
     ;
 
-pointer: ASTERISK
+pointer: ASTERISK {printf("pointer\n");}
     ;
 
-parameter_list: parameter_declaration
-    | parameter_list COMMA parameter_declaration
+parameter_list: parameter_declaration {printf("parameter-list\n");}
+    | parameter_list COMMA parameter_declaration {printf("parameter-list\n");}
     ;
 
-parameter_declaration: type_specifier pointer_opt IDENTIFIER_opt
+parameter_declaration: type_specifier pointer_opt IDENTIFIER_opt {printf("parameter-declaration\n");}
     ;
 
-initializer: assignment_expression
+initializer: assignment_expression {printf("initializer\n");}
     ;
 
 // Statements
-statement: compound_statement
-    | expression_statement
-    | selection_statement
-    | iteration_statement
-    | jump_statement
+statement: compound_statement {printf("statement\n");}
+    | expression_statement {printf("statement\n");} 
+    | selection_statement  {printf("statement\n");}
+    | iteration_statement {printf("statement\n");}
+    | jump_statement {printf("statement\n");}
     ;
 
-compound_statement: OP_BRACE block_item_list_opt CL_BRACE
+compound_statement: OP_BRACE block_item_list_opt CL_BRACE {printf("compound-statement\n");}
     ;
 
-block_item_list: block_item
-    | block_item_list block_item
+block_item_list: block_item {printf("block_item_list\n");}
+    | block_item_list block_item  {printf("block_item_list\n");}
     ;
 
-block_item: declaration
-    | statement
+block_item: declaration {printf("block_item\n");}
+    | statement  {printf("block_item\n");}
     ;
 
-expression_statement: expression_opt SEMICOLON
+expression_statement: expression_opt SEMICOLON {printf("expression-statement\n");}
     ;
 
-selection_statement : IF OP_PARENTHESIS expression CL_PARENTHESIS statement
-    | IF OP_PARENTHESIS expression CL_PARENTHESIS statement ELSE statement
+selection_statement: IF OP_PARENTHESIS expression CL_PARENTHESIS statement {printf("selection-statement\n");}
+    | IF OP_PARENTHESIS expression CL_PARENTHESIS statement ELSE statement {printf("selection-statement\n");}
     ;
 
-iteration_statement:
-    FOR OP_PARENTHESIS expression_opt SEMICOLON expression_opt SEMICOLON expression_opt CL_PARENTHESIS statement
+iteration_statement:  
+    FOR OP_PARENTHESIS expression_opt SEMICOLON expression_opt SEMICOLON expression_opt CL_PARENTHESIS statement {printf("iteration-statement\n");}
     ;
 
-jump_statement: RETURN expression_opt SEMICOLON
+jump_statement: RETURN expression_opt SEMICOLON {printf("jump-statement\n");}
+    ;
 
 // Translation unit
-translation_unit: external_declaration
-    | translation_unit external_declaration
+translation_unit: external_declaration {printf("translation-unit\n");}
+    | translation_unit external_declaration {printf("translation-unit\n");}
     ;
 
-external_declaration: declaration
-    | function_definition
+external_declaration: declaration {printf("external-declaration\n");}
+    | function_definition {printf("external-declaration\n");}
     ;
 
-function_definition: type_specifier declarator compound_statement
+function_definition: type_specifier declarator compound_statement {printf("function-definition\n");}
+    ;
+declaration_list: declaration {printf("declaration-list\n");}
+    | declaration_list declaration {printf("declaration-list\n");}
     ;
 %%
+void yyerror(char *s) {
+  printf("Error: %s on '%s'\n", s, yytext);
+}
