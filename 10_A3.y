@@ -64,32 +64,32 @@ extern void yyerror(char *s);
 %start translation_unit
 %%
 
-CONSTANT: INTEGER_CONSTANT
-    | CHARACTER_CONSTANT
+CONSTANT: INTEGER_CONSTANT {printf("constant\n");}
+    | CHARACTER_CONSTANT {printf("constant\n");}
     ;
 
 // Optionals
-IDENTIFIER_opt: IDENTIFIER
+IDENTIFIER_opt: IDENTIFIER {;}
+    | /* empty */ 
+    ;
+
+argument_expression_list_opt: argument_expression_list {;}
     | /* empty */
     ;
 
-argument_expression_list_opt: argument_expression_list
+pointer_opt: pointer {;}
     | /* empty */
     ;
 
-pointer_opt: pointer
+parameter_list_opt: parameter_list {;}
     | /* empty */
     ;
 
-parameter_list_opt: parameter_list
+block_item_list_opt: block_item_list {;}
     | /* empty */
     ;
 
-block_item_list_opt: block_item_list
-    | /* empty */
-    ;
-
-expression_opt: expression
+expression_opt: expression {;}
     | /* empty */
     ;
 
